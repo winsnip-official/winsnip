@@ -12,7 +12,7 @@ import EnterpriseFooter from '@/components/EnterpriseFooter'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black">
+    <main>
       <Navigation />
       <ShowcaseHero />
       <ProjectsGrid />

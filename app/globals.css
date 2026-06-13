@@ -1,58 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --accent: 59 130 246;
-    --radius-sm: 0.5rem;
-    --radius-md: 0.75rem;
-    --radius-lg: 1rem;
-    --radius-xl: 1.25rem;
-    --radius-2xl: 1.5rem;
-  }
-
   html { scroll-behavior: smooth; }
-
   body {
     font-family: 'Outfit', system-ui, sans-serif;
-    background-color: #09090b;
-    color: #fafafa;
+    background: #fff;
+    color: #0a0a0a;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
-
-  /* Reduced motion — blanket override */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
     }
   }
 }
 
 @layer utilities {
-  .font-mono {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Noise overlay — applied only to fixed, pointer-events-none pseudo-element */
-  .noise::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 999;
-    pointer-events: none;
-    opacity: 0.025;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 128px 128px;
-  }
-
+  .font-mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
   .text-balance { text-wrap: balance; }
-  .text-pretty  { text-wrap: pretty; }
 }
