@@ -23,7 +23,7 @@ export default function NetworksSection() {
   const reduce = useReducedMotion()
 
   return (
-    <section id="networks" className="py-24 bg-white border-t border-gray-100">
+    <section id="networks" className="py-24 border-t" style={{ background: '#f8faff', borderColor: '#e0e7ff' }}>
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
 
         <motion.div className="mb-14"

@@ -13,18 +13,17 @@ export default function CTASection() {
   const [focused, setFocused] = useState('')
 
   return (
-    <section id="contact" className="py-24 bg-gray-50 border-t border-gray-100 relative overflow-hidden">
-      {/* Grid background */}
-      <div className="absolute inset-0 pointer-events-none opacity-50">
+    <section id="contact" className="py-24 relative overflow-hidden" style={{ background: '#0a1628' }}>
+      {/* Same grid as hero */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="contact-grid" x="0" y="0" width="48" height="48" patternUnits="userSpaceOnUse">
-              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#e2e8f0" strokeWidth="0.6"/>
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#60a5fa" strokeWidth="0.6"/>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#contact-grid)" />
         </svg>
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 50%, transparent 40%, #f8fafc 85%)' }} />
       </div>
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10">
 
@@ -33,11 +32,11 @@ export default function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: E }}>
-          <p className="text-sm font-semibold text-blue-600 uppercase tracking-widest mb-3">Contact</p>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-tight">
+          <p className="text-sm font-semibold text-blue-400 uppercase tracking-widest mb-3">Contact</p>
+          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
             Get in touch with our team.
           </h2>
-          <p className="text-base text-gray-500 mt-3 max-w-[44ch]">
+          <p className="text-base mt-3 max-w-[44ch]" style={{ color: 'rgba(255,255,255,0.5)' }}>
             We respond within 24 hours. Infrastructure, validator services, or partnerships.
           </p>
         </motion.div>
@@ -52,7 +51,8 @@ export default function CTASection() {
             ].map(c => (
               <motion.a key={c.label} href={c.href}
                 target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
-                className="group flex items-center gap-5 p-6 rounded-2xl border-2 border-gray-100 bg-white hover:border-blue-200 hover:shadow-lg hover:shadow-blue-100/40 transition-all duration-300"
+                className="group flex items-center gap-5 p-6 rounded-2xl border transition-all duration-300"
+                style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)' }}
                 initial={reduce ? false : { opacity: 0, x: -16 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -66,10 +66,10 @@ export default function CTASection() {
                   <c.icon size={22} style={{ color: c.color }} />
                 </motion.div>
                 <div>
-                  <div className="text-xs font-semibold text-gray-400 mb-0.5">{c.label}</div>
-                  <div className="text-lg font-bold text-gray-900">{c.detail}</div>
+                  <div className="text-xs font-semibold mb-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>{c.label}</div>
+                  <div className="text-lg font-bold text-white">{c.detail}</div>
                 </div>
-                <ArrowRight size={16} className="ml-auto text-gray-300 group-hover:text-blue-600 transition-colors group-hover:translate-x-1 transform" />
+                <ArrowRight size={16} className="ml-auto transition-colors group-hover:translate-x-1 transform" style={{ color: 'rgba(255,255,255,0.25)' }} />
               </motion.a>
             ))}
 
@@ -117,7 +117,8 @@ export default function CTASection() {
             </motion.div>
           ) : (
             <motion.form onSubmit={e => { e.preventDefault(); setDone(true) }}
-              className="p-8 rounded-3xl bg-white border-2 border-gray-100 shadow-sm space-y-4"
+              className="p-8 rounded-3xl space-y-4"
+              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
               initial={reduce ? false : { opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -129,30 +130,33 @@ export default function CTASection() {
                   { k: 'email', l: 'Email',     t: 'email', ph: 'you@example.com' },
                 ].map(f => (
                   <div key={f.k}>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">{f.l}</label>
+                    <label className="block text-xs font-bold mb-2 uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>{f.l}</label>
                     <motion.input type={f.t} placeholder={f.ph}
                       value={form[f.k as keyof typeof form]}
                       onChange={e => setForm({ ...form, [f.k]: e.target.value })}
                       onFocus={() => setFocused(f.k)}
                       onBlur={() => setFocused('')}
-                      className="w-full border-2 border-gray-200 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-300 outline-none transition-colors bg-gray-50 focus:bg-white"
+                      className="w-full rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors"
+                      style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', color: '#fff' }}
                       animate={focused === f.k ? { scale: 1.01 } : { scale: 1 }}
                       required />
                   </div>
                 ))}
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Subject</label>
+                <label className="block text-xs font-bold mb-2 uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>Subject</label>
                 <input type="text" placeholder="What is this about?"
                   value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })}
-                  className="w-full border-2 border-gray-200 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-300 outline-none transition-colors bg-gray-50 focus:bg-white"
+                  className="w-full rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
                   required />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Message</label>
+                <label className="block text-xs font-bold mb-2 uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>Message</label>
                 <textarea placeholder="Tell us more..." rows={5}
                   value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
-                  className="w-full border-2 border-gray-200 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-300 outline-none transition-colors bg-gray-50 focus:bg-white resize-none"
+                  className="w-full rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors resize-none"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
                   required />
               </div>
               <motion.button type="submit"

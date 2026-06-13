@@ -22,7 +22,7 @@ export default function PartnersSection() {
   const reduce = useReducedMotion()
 
   return (
-    <section className="py-24 bg-white border-t border-gray-100">
+    <section className="py-24 border-t border-gray-100" style={{ background: '#fafbff' }}>
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
 
         <motion.div className="mb-14"

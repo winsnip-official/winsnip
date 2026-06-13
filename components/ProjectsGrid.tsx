@@ -116,7 +116,7 @@ export default function ProjectsGrid() {
   const rest = projects.slice(1)
 
   return (
-    <section id="projects" className="py-24 bg-white border-t border-gray-100">
+    <section id="projects" className="py-24 border-t border-gray-100" style={{ background: '#f8faff' }}>
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
 
         {/* Header */}

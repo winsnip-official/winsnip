@@ -24,13 +24,13 @@ export default function FeaturesShowcase() {
   const reduce = useReducedMotion()
 
   return (
-    <section id="features" className="py-24 bg-gray-50 border-t border-gray-100 overflow-hidden relative">
-      {/* Subtle grid lines background */}
-      <div className="absolute inset-0 pointer-events-none opacity-40">
+    <section id="features" className="py-24 overflow-hidden relative" style={{ background: 'linear-gradient(160deg, #0d1f38 0%, #111d35 100%)' }}>
+      {/* Grid on dark */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="feat-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" strokeWidth="0.8"/>
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#60a5fa" strokeWidth="0.8"/>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#feat-grid)" />
@@ -43,12 +43,12 @@ export default function FeaturesShowcase() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: E }}>
-          <p className="text-sm font-semibold text-blue-600 uppercase tracking-widest mb-3">Services</p>
+          <p className="text-sm font-semibold text-blue-400 uppercase tracking-widest mb-3">Services</p>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-tight">
+            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
               Everything you need<br />to run on-chain.
             </h2>
-            <p className="text-base text-gray-500 max-w-[38ch] leading-relaxed">
+            <p className="text-base leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)', maxWidth: '38ch' }}>
               Six services, one team. We build and operate every piece of blockchain infrastructure in-house.
             </p>
           </div>
@@ -120,23 +120,25 @@ export default function FeaturesShowcase() {
               const Icon = s.icon
               return (
                 <motion.div key={s.title}
-                  className="group rounded-2xl p-6 bg-white border-2 border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300 flex flex-col"
+                  className="group rounded-2xl p-6 border transition-all duration-300 flex flex-col"
+                  style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.08)' }}
                   initial={reduce ? false : { opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: i * 0.07, ease: E }}
-                  whileHover={reduce ? {} : { y: -4 }}>
+                  whileHover={reduce ? {} : { y: -4, borderColor: 'rgba(99,102,241,0.4)' } as any}>
                   <motion.div
-                    className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4"
+                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
+                    style={{ background: 'rgba(99,102,241,0.15)' }}
                     whileHover={reduce ? {} : { rotate: 10, scale: 1.1 }}
                     transition={{ type: 'spring', stiffness: 300 }}>
-                    <Icon size={18} className="text-blue-600" />
+                    <Icon size={18} className="text-indigo-400" />
                   </motion.div>
                   <div className="flex items-start justify-between gap-2 mb-2">
-                    <h3 className="text-base font-bold text-gray-900 leading-tight">{s.title}</h3>
-                    <span className="flex-shrink-0 text-[10px] font-bold px-2 py-1 rounded-full bg-blue-50 text-blue-600 font-mono">{s.badge}</span>
+                    <h3 className="text-base font-bold text-white leading-tight">{s.title}</h3>
+                    <span className="flex-shrink-0 text-[10px] font-bold px-2 py-1 rounded-full font-mono" style={{ background: 'rgba(99,102,241,0.2)', color: '#a5b4fc' }}>{s.badge}</span>
                   </div>
-                  <p className="text-xs text-gray-500 leading-relaxed flex-grow">{s.desc}</p>
+                  <p className="text-xs leading-relaxed flex-grow" style={{ color: 'rgba(255,255,255,0.4)' }}>{s.desc}</p>
                 </motion.div>
               )
             })}
