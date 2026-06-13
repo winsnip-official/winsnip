@@ -24,8 +24,19 @@ export default function FeaturesShowcase() {
   const reduce = useReducedMotion()
 
   return (
-    <section id="features" className="py-24 bg-gray-50 border-t border-gray-100 overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+    <section id="features" className="py-24 bg-gray-50 border-t border-gray-100 overflow-hidden relative">
+      {/* Subtle grid lines background */}
+      <div className="absolute inset-0 pointer-events-none opacity-40">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="feat-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" strokeWidth="0.8"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#feat-grid)" />
+        </svg>
+      </div>
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10">
 
         <motion.div className="mb-14"
           initial={reduce ? false : { opacity: 0, y: 16 }}

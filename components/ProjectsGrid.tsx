@@ -254,7 +254,17 @@ export default function ProjectsGrid() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, delay: i * 0.09, ease: E }}
-              whileHover={reduce ? {} : { y: -8, scale: 1.01 }}>
+              whileHover={reduce ? {} : { y: -8, scale: 1.01 }}
+              onMouseMove={e => {
+                if (reduce) return
+                const r = e.currentTarget.getBoundingClientRect()
+                e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`)
+                e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`)
+              }}>
+
+              {/* Magic spotlight follows cursor */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
+                style={{ background: `radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), ${p.color}12, transparent 70%)` }} />
 
               {/* Top color line animates in on hover */}
               <motion.div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"

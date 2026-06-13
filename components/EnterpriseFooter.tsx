@@ -88,15 +88,30 @@ export default function EnterpriseFooter() {
           ))}
         </div>
 
-        {/* CTA banner */}
+        {/* CTA banner with animated bg */}
         <motion.div
-          className="mb-10 p-8 rounded-3xl bg-blue-600 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-5 relative overflow-hidden"
+          className="mb-10 p-8 rounded-3xl text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-5 relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #1d4ed8 0%, #2563eb 40%, #4f46e5 100%)' }}
           initial={reduce ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}>
-          <div className="absolute inset-0 opacity-[0.06]"
-            style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          {/* Animated dot pattern overlay */}
+          <div className="absolute inset-0 opacity-[0.08]">
+            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="footer-dot" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+                  <circle cx="2" cy="2" r="2" fill="#fff" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#footer-dot)" />
+            </svg>
+          </div>
+          {/* Animated glow */}
+          <motion.div className="absolute -top-10 -right-10 w-48 h-48 rounded-full opacity-20 pointer-events-none"
+            style={{ background: 'radial-gradient(circle, #93c5fd, transparent)' }}
+            animate={reduce ? {} : { scale: [1, 1.3, 1] }}
+            transition={{ duration: 4, repeat: Infinity }} />
           <div className="relative z-10">
             <div className="text-xl font-black mb-1">Ready to get started?</div>
             <div className="text-blue-200 text-sm">Join validators running on WinSnip infrastructure.</div>

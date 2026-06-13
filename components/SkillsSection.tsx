@@ -36,8 +36,20 @@ export default function SkillsSection() {
   const inView = useInView(ref, { once: true, amount: 0.3 })
 
   return (
-    <section id="skills" className="py-24 bg-gray-50 border-t border-gray-100 overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+    <section id="skills" className="py-24 bg-gray-50 border-t border-gray-100 overflow-hidden relative">
+      {/* Dot pattern background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <svg className="absolute inset-0 w-full h-full opacity-25" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="skills-dot" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r="1" fill="#cbd5e1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#skills-dot)" />
+        </svg>
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 100%, transparent 50%, #f8fafc 90%)' }} />
+      </div>
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10">
 
         <motion.div className="mb-14"
           initial={reduce ? false : { opacity: 0, y: 16 }}

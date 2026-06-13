@@ -13,8 +13,20 @@ export default function CTASection() {
   const [focused, setFocused] = useState('')
 
   return (
-    <section id="contact" className="py-24 bg-gray-50 border-t border-gray-100">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+    <section id="contact" className="py-24 bg-gray-50 border-t border-gray-100 relative overflow-hidden">
+      {/* Grid background */}
+      <div className="absolute inset-0 pointer-events-none opacity-50">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="contact-grid" x="0" y="0" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#e2e8f0" strokeWidth="0.6"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#contact-grid)" />
+        </svg>
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 50%, transparent 40%, #f8fafc 85%)' }} />
+      </div>
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10">
 
         <motion.div className="mb-14"
           initial={reduce ? false : { opacity: 0, y: 16 }}
