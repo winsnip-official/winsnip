@@ -1,7 +1,7 @@
 'use client'
 
-import { motion, useReducedMotion, useMotionValue, useTransform, useSpring, animate } from 'framer-motion'
-import { ArrowRight, CheckCircle, Activity, Shield, Zap } from 'lucide-react'
+import { motion, useReducedMotion, useMotionValue, useSpring, animate } from 'framer-motion'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
@@ -11,343 +11,309 @@ function Counter({ to, duration = 2 }: { to: number; duration?: number }) {
   const [val, setVal] = useState(0)
   const ran = useRef(false)
   useEffect(() => {
-    if (ran.current) return
-    ran.current = true
+    if (ran.current) return; ran.current = true
     const c = animate(0, to, { duration, ease: 'easeOut', onUpdate: v => setVal(Math.floor(v)) })
     return () => c.stop()
   }, [to, duration])
   return <>{val.toLocaleString()}</>
 }
 
-function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
-  const reduce = useReducedMotion()
-  const x = useMotionValue(0), y = useMotionValue(0)
-  const rX = useTransform(y, [-0.5, 0.5], [6, -6])
-  const rY = useTransform(x, [-0.5, 0.5], [-6, 6])
-  const sX = useSpring(rX, { stiffness: 180, damping: 22 })
-  const sY = useSpring(rY, { stiffness: 180, damping: 22 })
-  return (
-    <motion.div className={className}
-      style={reduce ? {} : { rotateX: sX, rotateY: sY, transformStyle: 'preserve-3d' }}
-      onMouseMove={e => {
-        if (reduce) return
-        const r = e.currentTarget.getBoundingClientRect()
-        x.set((e.clientX - r.left) / r.width - 0.5)
-        y.set((e.clientY - r.top) / r.height - 0.5)
-      }}
-      onMouseLeave={() => { x.set(0); y.set(0) }}>
-      {children}
-    </motion.div>
-  )
-}
-
 const products = [
-  { name: 'WinScan',    chain: 'Cosmos',    logo: '/COSMOS.png',  color: '#60a5fa', transactions: 14_119_218, tps: 4821 },
-  { name: 'Monad Scan', chain: 'Monad',     logo: '/monad.svg',   color: '#a78bfa', transactions: 8_432_091,  tps: 9104 },
-  { name: 'CC Scan',    chain: 'Canton',    logo: '/canton1.png', color: '#fb923c', transactions: 2_891_340,  tps: 1230 },
-  { name: 'Wintip',     chain: 'Analytics', logo: '/Wintip.png',  color: '#34d399', transactions: 5_204_881,  tps: 3321 },
+  { name: 'WinScan',    chain: 'Cosmos',    logo: '/COSMOS.png',  color: 'rgba(255,255,255,0.7)', txs: 14_119_218, tps: 4821 },
+  { name: 'Monad Scan', chain: 'Monad',     logo: '/monad.svg',   color: 'rgba(255,255,255,0.6)', txs: 8_432_091,  tps: 9104 },
+  { name: 'CC Scan',    chain: 'Canton',    logo: '/canton1.png', color: 'rgba(255,255,255,0.55)', txs: 2_891_340, tps: 1230 },
+  { name: 'Wintip',     chain: 'Analytics', logo: '/Wintip.png',  color: 'rgba(255,255,255,0.65)', txs: 5_204_881, tps: 3321 },
 ]
 
-const partnerLogos = [
-  { src: '/COSMOS.png',  name: 'Cosmos'  },
-  { src: '/monad.svg',   name: 'Monad'   },
-  { src: '/canton1.png', name: 'Canton'  },
-  { src: '/XRPL.png',    name: 'XRP EVM' },
-  { src: '/walrus.webp', name: 'Walrus'  },
-  { src: '/paxi.png',    name: 'Paxinet' },
+const partners = [
+  { src: '/COSMOS.png', name: 'Cosmos' }, { src: '/monad.svg', name: 'Monad' },
+  { src: '/canton1.png', name: 'Canton' }, { src: '/XRPL.png', name: 'XRP EVM' },
+  { src: '/walrus.webp', name: 'Walrus' }, { src: '/paxi.png', name: 'Paxinet' },
 ]
 
 export default function ShowcaseHero() {
   const reduce = useReducedMotion()
-  const [activeProduct, setActiveProduct] = useState(0)
+  const [active, setActive] = useState(0)
+  const mx = useMotionValue(0), my = useMotionValue(0)
+  const sx = useSpring(mx, { stiffness: 130, damping: 16 })
+  const sy = useSpring(my, { stiffness: 130, damping: 16 })
 
   useEffect(() => {
     if (reduce) return
-    const t = setInterval(() => setActiveProduct(p => (p + 1) % products.length), 3000)
+    const t = setInterval(() => setActive(p => (p + 1) % products.length), 3000)
     return () => clearInterval(t)
   }, [reduce])
 
   return (
-    <section className="pt-16 overflow-hidden" style={{ background: '#0a1628' }}>
+    <section className="relative min-h-[100dvh] flex flex-col overflow-hidden" style={{ background: '#050709' }}>
 
-      {/* ═══ CITI-STYLE DARK NAVY HERO ═══ */}
-      <div className="relative overflow-hidden">
-
-        {/* Background rings - Cumberland style on dark */}
-        <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-          {/* Rings right */}
-          <div className="absolute -right-48 top-1/2 -translate-y-1/2 w-[900px] h-[900px]">
-            {[1,2,3,4,5,6,7,8,9].map(n => (
-              <motion.div key={n}
-                className="absolute rounded-full"
-                style={{
-                  inset: `${(n-1) * 46}px`,
-                  border: `${n <= 2 ? '1.5px' : '1px'} solid rgba(96,165,250,${Math.max(0.04, 0.16 - n*0.015)})`,
-                }}
-                animate={reduce ? {} : { rotate: n % 2 === 0 ? [0,360] : [360,0] }}
-                transition={{ duration: 35 + n*7, repeat: Infinity, ease: 'linear' }} />
-            ))}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div className="w-4 h-4 rounded-full bg-blue-400"
-                animate={reduce ? {} : { scale:[1,1.6,1], opacity:[0.7,1,0.7] }}
-                transition={{ duration: 3, repeat: Infinity }} />
-            </div>
-            {/* Fade rings at edges */}
-            <div className="absolute inset-0 rounded-full"
-              style={{ background: 'radial-gradient(circle, transparent 15%, #0a1628 75%)' }} />
-          </div>
-          {/* Fine grid */}
-          <svg className="absolute inset-0 w-full h-full opacity-[0.05]" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="nav-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#60a5fa" strokeWidth="0.5"/>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#nav-grid)" />
-          </svg>
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-12 pt-20 pb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-            {/* LEFT */}
-            <div>
-              <motion.div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
-                style={{ background: 'rgba(96,165,250,0.12)', border: '1px solid rgba(96,165,250,0.25)' }}
-                initial={reduce ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, ease: E }}>
-                <motion.span className="w-2 h-2 rounded-full bg-emerald-400"
-                  animate={reduce ? {} : { scale: [1,1.5,1] }}
-                  transition={{ duration: 2, repeat: Infinity }} />
-                <span className="text-sm font-semibold text-blue-300">Blockchain Infrastructure</span>
-              </motion.div>
-
-              <motion.h1 className="font-black leading-[0.95] tracking-tight mb-8 text-white"
-                style={{ fontSize: 'clamp(3rem, 6.5vw, 6rem)' }}
-                initial={reduce ? false : { opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.08, ease: E }}>
-                Professional<br />
-                <span style={{ color: '#60a5fa' }}>blockchain</span><br />
-                infrastructure.
-              </motion.h1>
-
-              <motion.p className="text-lg leading-relaxed max-w-[48ch] mb-10"
-                style={{ color: 'rgba(255,255,255,0.55)' }}
-                initial={reduce ? false : { opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2, ease: E }}>
-                Validator node operations, live block explorers, and airdrop
-                intelligence trusted by institutions across Cosmos, Monad,
-                and Canton Network.
-              </motion.p>
-
-              <motion.div className="flex flex-wrap gap-4 mb-14"
-                initial={reduce ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.3, ease: E }}>
-                <a href="#projects"
-                  onClick={e => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
-                  className="group inline-flex items-center gap-2 px-7 py-3.5 bg-blue-500 hover:bg-blue-400 text-white text-base font-semibold rounded-xl transition-colors">
-                  Explore Products
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                </a>
-                <a href="https://service.winsnip.xyz/" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 text-base font-semibold rounded-xl transition-all"
-                  style={{ border: '1.5px solid rgba(255,255,255,0.18)', color: 'rgba(255,255,255,0.7)' }}
-                  onMouseEnter={e => { (e.target as HTMLElement).style.borderColor = 'rgba(96,165,250,0.5)'; (e.target as HTMLElement).style.color = '#fff' }}
-                  onMouseLeave={e => { (e.target as HTMLElement).style.borderColor = 'rgba(255,255,255,0.18)'; (e.target as HTMLElement).style.color = 'rgba(255,255,255,0.7)' }}>
-                  Validator Guides
-                </a>
-              </motion.div>
-
-              <motion.div className="flex flex-wrap gap-6"
-                initial={reduce ? false : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.45 }}>
-                {[
-                  { icon: CheckCircle, label: '99.9% Uptime SLA' },
-                  { icon: Shield,      label: '4 Live Products'   },
-                  { icon: Activity,    label: '$5M+ Partnerships'  },
-                ].map(b => (
-                  <div key={b.label} className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                    <b.icon size={14} className="text-blue-400 flex-shrink-0" />
-                    <span className="font-medium">{b.label}</span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* RIGHT — Dashboard */}
-            <motion.div
-              initial={reduce ? false : { opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.9, delay: 0.25, ease: E }}
-              className="hidden lg:block">
-              <TiltCard className="relative">
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl"
-                  style={{ background: '#0f1e35', border: '1px solid rgba(96,165,250,0.2)' }}>
-                  {/* Border beam */}
-                  <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                    <motion.div className="absolute h-[2px] w-32 top-0"
-                      style={{ background: 'linear-gradient(90deg, transparent, #60a5fa, #a78bfa, transparent)' }}
-                      animate={reduce ? {} : { x: ['-128px', '500px'] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: 'linear', repeatDelay: 0.5 }} />
-                  </div>
-
-                  {/* Browser bar */}
-                  <div className="flex items-center gap-2 px-5 py-3.5 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)' }}>
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-400/70" />
-                    <div className="flex-1 mx-3">
-                      <div className="rounded-lg px-3 py-1.5 text-xs font-mono flex items-center gap-2"
-                        style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.3)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                        <motion.span className="w-1.5 h-1.5 rounded-full bg-emerald-400"
-                          animate={reduce ? {} : { opacity: [1,0.3,1] }}
-                          transition={{ duration: 1.5, repeat: Infinity }} />
-                        winscan.winsnip.xyz
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Tabs */}
-                  <div className="px-6 pt-5">
-                    <div className="flex gap-2 mb-5">
-                      {products.map((p, i) => (
-                        <button key={p.name} onClick={() => setActiveProduct(i)}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all"
-                          style={activeProduct === i
-                            ? { background: `${p.color}22`, color: p.color, border: `1px solid ${p.color}40` }
-                            : { background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)', border: '1px solid transparent' }}>
-                          <Image src={p.logo} alt={p.name} width={12} height={12} className="object-contain" />
-                          {p.chain}
-                        </button>
-                      ))}
-                    </div>
-
-                    <motion.div key={activeProduct}
-                      initial={reduce ? false : { opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.25 }}>
-                      <div className="grid grid-cols-2 gap-3 mb-4">
-                        <div className="p-4 rounded-2xl" style={{ background: `${products[activeProduct].color}12`, border: `1px solid ${products[activeProduct].color}25` }}>
-                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: `${products[activeProduct].color}` }}>Transactions</p>
-                          <p className="text-xl font-black font-mono" style={{ color: products[activeProduct].color }}>
-                            <Counter to={products[activeProduct].transactions} duration={1.5} />
-                          </p>
-                        </div>
-                        <div className="p-4 rounded-2xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
-                          <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: 'rgba(255,255,255,0.35)' }}>TPS</p>
-                          <div className="flex items-end gap-1">
-                            <p className="text-xl font-black text-white font-mono">
-                              <Counter to={products[activeProduct].tps} duration={1} />
-                            </p>
-                            <span className="text-xs mb-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>tx/s</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-2 pb-5">
-                        {[141193,141192,141191,141190].map((block, i) => (
-                          <div key={block} className="flex items-center gap-3 p-3 rounded-xl"
-                            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                              style={{ background: `${products[activeProduct].color}15` }}>
-                              <Zap size={11} style={{ color: products[activeProduct].color }} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-[10px] font-mono" style={{ color: 'rgba(255,255,255,0.35)' }}>Block #{(block-i).toLocaleString()}</div>
-                              <div className="text-[9px] font-mono truncate" style={{ color: 'rgba(255,255,255,0.18)' }}>
-                                {['0x4a2f...9b3c','0xa18d...f042','0x7e5a...c831','0x2b9f...a441'][i]}
-                              </div>
-                            </div>
-                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: 'rgba(52,211,153,0.12)', color: '#34d399', border: '1px solid rgba(52,211,153,0.2)' }}>✓</span>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  </div>
-                </div>
-
-                {/* Floating badges */}
-                <motion.div className="absolute -top-4 -right-4 rounded-2xl px-4 py-3 flex items-center gap-3"
-                  style={{ background: '#0f1e35', border: '1px solid rgba(96,165,250,0.25)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}
-                  animate={reduce ? {} : { y: [0,-5,0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(52,211,153,0.15)' }}>
-                    <CheckCircle size={15} className="text-emerald-400" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold text-white">All Systems Live</div>
-                    <div className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>4 / 4 running</div>
-                  </div>
-                </motion.div>
-
-                <motion.div className="absolute -bottom-3 -left-4 rounded-2xl px-4 py-3"
-                  style={{ background: '#0f1e35', border: '1px solid rgba(96,165,250,0.25)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}
-                  animate={reduce ? {} : { y: [0,5,0] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}>
-                  <div className="text-sm font-black text-blue-400 font-mono">99.9%</div>
-                  <div className="text-[10px]" style={{ color: 'rgba(255,255,255,0.35)' }}>Uptime SLA</div>
-                </motion.div>
-              </TiltCard>
-            </motion.div>
-          </div>
-        </div>
+      {/* BG: xlabs-style — very subtle, mostly typography */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Faint horizontal lines — editorial grid */}
+        <div className="absolute inset-0 opacity-[0.025]"
+          style={{ backgroundImage: 'linear-gradient(transparent calc(100% - 1px), rgba(255,255,255,0.5) 100%)', backgroundSize: '100% 80px' }} />
+        {/* Single focused glow top-right */}
+        <div className="absolute -top-20 right-0 w-[500px] h-[500px] opacity-[0.08] pointer-events-none"
+          style={{ background: 'radial-gradient(circle at 80% 20%, rgba(255,255,255,0.4) 0%, transparent 60%)' }} />
       </div>
 
-      {/* ═══ TRUSTED BY — scrolling marquee ═══ */}
-      <div className="relative overflow-hidden" style={{ background: 'rgba(255,255,255,0.03)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to right, #0a1628, transparent)' }} />
-        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to left, #0a1628, transparent)' }} />
-        <div className="flex items-center py-5">
-          <div className="flex-shrink-0 px-8 z-20">
-            <p className="text-xs font-bold uppercase tracking-widest whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.3)' }}>Trusted by</p>
-          </div>
-          <div className="flex-1 overflow-hidden">
-            <motion.div className="flex items-center gap-4 w-max"
-              animate={reduce ? {} : { x: ['0%', '-50%'] }}
-              transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}>
-              {[...partnerLogos, ...partnerLogos].map((p, i) => (
-                <div key={i} className="flex items-center gap-2.5 px-5 py-2.5 rounded-xl flex-shrink-0 group cursor-default transition-all"
-                  style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <Image src={p.src} alt={p.name} width={20} height={20}
-                    className="object-contain opacity-40 group-hover:opacity-90 grayscale group-hover:grayscale-0 brightness-200 transition-all duration-300" />
-                  <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.45)' }}>{p.name}</span>
+      {/* CONTENT */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center max-w-[1400px] mx-auto w-full px-6 lg:px-10 pt-24 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-16 items-center">
+
+          {/* LEFT — xlabs-style massive type */}
+          <div>
+            {/* Section label like xlabs */}
+            <motion.p className="text-xs font-bold uppercase tracking-[0.25em] mb-8"
+              style={{ color: 'rgba(255,255,255,0.3)' }}
+              initial={reduce ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, ease: E }}>
+              Blockchain Infrastructure
+            </motion.p>
+
+            {/* Massive headline — xlabs style */}
+            <div className="mb-8 overflow-hidden">
+              {[
+                { t: 'Core infrastructure',  italic: false, delay: 0.05, color: '#ffffff' },
+                { t: 'for the',              italic: true,  delay: 0.12, color: 'rgba(255,255,255,0.35)' },
+                { t: 'internet of value.',   italic: false, delay: 0.19, gradient: true },
+              ].map(l => (
+                <div key={l.t} className="overflow-hidden">
+                  <motion.div
+                    className={`font-black leading-[0.92] tracking-[-0.04em] ${l.italic ? 'italic' : ''}`}
+                    style={{
+                      fontSize: 'clamp(2.8rem, 7vw, 6.5rem)',
+                      ...('gradient' in l && l.gradient ? {
+                        background: 'linear-gradient(90deg, #60a5fa 0%, #a78bfa 50%, #60a5fa 100%)',
+                        backgroundSize: '200% 100%',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        animation: 'grad-slide 4s linear infinite',
+                      } : { color: l.color }),
+                    }}
+                    initial={reduce ? false : { y: '110%' }}
+                    animate={{ y: '0%' }}
+                    transition={{ duration: 0.8, delay: l.delay, ease: E }}>
+                    {l.t}
+                  </motion.div>
                 </div>
               ))}
+            </div>
+
+            <motion.p className="text-base leading-relaxed max-w-[46ch] mb-12"
+              style={{ color: 'rgba(255,255,255,0.45)', textWrap: 'pretty' } as React.CSSProperties}
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.32, ease: E }}>
+              We are relentlessly committed to empowering validators, developers,
+              and institutions across Cosmos, Monad, and Canton Network.
+            </motion.p>
+
+            {/* CTAs — xlabs minimal border style */}
+            <motion.div className="flex flex-wrap gap-4 mb-16"
+              initial={reduce ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.42, ease: E }}>
+              <motion.a
+                href="#projects"
+                onClick={e => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
+                className="group inline-flex items-center gap-2.5 px-7 py-3.5 text-sm font-bold text-white rounded-xl cursor-pointer select-none transition-all relative overflow-hidden"
+                style={reduce ? { background: '#3b82f6' } : { x: sx, y: sy, background: '#3b82f6' }}
+                onMouseMove={e => {
+                  if (reduce) return
+                  const r = e.currentTarget.getBoundingClientRect()
+                  mx.set((e.clientX - (r.left + r.width / 2)) * 0.25)
+                  my.set((e.clientY - (r.top + r.height / 2)) * 0.25)
+                }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#2563eb'}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#3b82f6'; mx.set(0); my.set(0) }}
+                whileTap={{ scale: 0.98 }}>
+                <motion.span className="absolute inset-0 -translate-x-full pointer-events-none"
+                  style={{ background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent)' }}
+                  whileHover={{ translateX: '200%' }}
+                  transition={{ duration: 0.5 }} />
+                <span className="relative">Our work</span>
+                <ArrowRight size={14} className="relative group-hover:translate-x-1 transition-transform" />
+              </motion.a>
+
+              <a href="https://service.winsnip.xyz/" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-xl transition-all"
+                style={{ color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.1)' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#fff'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(59,130,246,0.4)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)' }}>
+                Validator guides <ArrowUpRight size={13} />
+              </a>
+            </motion.div>
+
+            {/* Trusted by */}
+            <motion.div
+              initial={reduce ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] mb-4" style={{ color: 'rgba(255,255,255,0.2)' }}>
+                Powering
+              </p>
+              <div className="flex flex-wrap items-center gap-5">
+                {partners.map((p, i) => (
+                  <motion.div key={p.name}
+                    className="flex items-center gap-2 opacity-30 hover:opacity-70 transition-opacity cursor-default"
+                    initial={reduce ? false : { opacity: 0 }}
+                    animate={{ opacity: 0.3 }}
+                    transition={{ delay: 0.65 + i * 0.05 }}>
+                    <Image src={p.src} alt={p.name} width={16} height={16} className="object-contain brightness-0 invert" />
+                    <span className="text-xs font-semibold text-white">{p.name}</span>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
           </div>
+
+          {/* RIGHT — product panel */}
+          <motion.div className="hidden lg:block"
+            initial={reduce ? false : { opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, delay: 0.28, ease: E }}>
+            <div className="rounded-2xl overflow-hidden"
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+
+              {/* Border beam */}
+              <div className="relative h-[1px] overflow-hidden">
+                <motion.div className="absolute top-0 h-[1px] w-24"
+                  style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)' }}
+                  animate={reduce ? {} : { x: ['-96px', '500px'] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: 'linear', repeatDelay: 1 }} />
+              </div>
+
+              {/* Browser bar */}
+              <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-400/50" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/50" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-400/50" />
+                </div>
+                <div className="flex-1 mx-3 rounded-md px-3 py-1.5 text-[11px] font-mono flex items-center gap-2"
+                  style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <motion.span className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+                    animate={reduce ? {} : { opacity: [1, 0.3, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }} />
+                  winscan.winsnip.xyz
+                </div>
+                {/* All Systems Live badge — in browser bar right side */}
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg flex-shrink-0"
+                  style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <motion.span className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+                    animate={reduce ? {} : { opacity: [1, 0.3, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }} />
+                  <div>
+                    <div className="text-[9px] font-bold text-white leading-tight">All Systems Live</div>
+                    <div className="text-[8px] leading-tight" style={{ color: 'rgba(255,255,255,0.35)' }}>4 / 4 running</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tabs */}
+              <div className="px-5 pt-4">
+                <div className="flex gap-1.5 mb-4">
+                  {products.map((p, i) => (
+                    <button key={p.name} onClick={() => setActive(i)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
+                      style={active === i
+                        ? { background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.9)', border: '1px solid rgba(255,255,255,0.25)' }
+                        : { background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.35)', border: '1px solid transparent' }}>
+                      <Image src={p.logo} alt="" width={11} height={11} className="object-contain brightness-0 invert opacity-60" />
+                      {p.chain}
+                    </button>
+                  ))}
+                </div>
+
+                <motion.div key={active}
+                  initial={reduce ? false : { opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}>
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 gap-2.5 mb-3">
+                    <div className="p-3.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                      <p className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>Transactions</p>
+                      <p className="text-lg font-black font-mono text-white">
+                        <Counter to={products[active].txs} duration={1.5} />
+                      </p>
+                    </div>
+                    <div className="p-3.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                      <p className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{ color: 'rgba(255,255,255,0.3)' }}>TPS</p>
+                      <div className="flex items-end gap-1">
+                        <p className="text-lg font-black text-white font-mono"><Counter to={products[active].tps} duration={1} /></p>
+                        <span className="text-[10px] mb-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>tx/s</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Block list */}
+                  <div className="space-y-1.5 pb-4">
+                    {[141193, 141192, 141191, 141190].map((b, i) => (
+                      <div key={b} className="flex items-center gap-2.5 px-3 py-2 rounded-lg"
+                        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.04)' }}>
+                        <div className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 text-[9px] font-black font-mono"
+                          style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)' }}>
+                          {(b - i) % 100}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-[10px] font-mono" style={{ color: 'rgba(255,255,255,0.3)' }}>Block #{(b - i).toLocaleString()}</div>
+                        </div>
+                        <span className="text-[9px] font-bold" style={{ color: '#34d399' }}>✓</span>                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+
+          </motion.div>
         </div>
       </div>
 
-      {/* ═══ STATS BAR ═══ */}
-      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+      {/* Stats bar — xlabs has clean bottom strip */}
+      <div className="relative z-10 flex-shrink-0" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="grid grid-cols-2 md:grid-cols-4" style={{ borderLeft: '1px solid rgba(255,255,255,0.06)' }}>
             {[
-              { value: '$5M+',  label: 'Partnership value',  sub: 'XRP EVM · Walrus · Paxinet', color: '#a78bfa' },
-              { value: '99.9%', label: 'Node uptime SLA',    sub: 'All live networks',           color: '#34d399' },
-              { value: '4',     label: 'Live products',      sub: 'Explorers & analytics',       color: '#60a5fa' },
-              { value: '50+',   label: 'Networks supported', sub: 'And growing',                 color: '#fb923c' },
+              { v: '$5M+',  l: 'Partnership value' },
+              { v: '99.9%', l: 'Node uptime' },
+              { v: '4',     l: 'Live products' },
+              { v: '50+',   l: 'Networks' },
             ].map((s, i) => (
-              <motion.div key={s.label} className="py-8 px-8 cursor-default"
+              <motion.div key={s.l} className="px-8 py-6 first:pl-0"
                 style={{ borderRight: '1px solid rgba(255,255,255,0.06)' }}
-                initial={reduce ? false : { opacity: 0, y: 8 }}
+                initial={reduce ? false : { opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.55 + i * 0.07, ease: E }}>
-                <div className="text-3xl font-black font-mono" style={{ color: s.color }}>{s.value}</div>
-                <div className="text-sm font-semibold text-white mt-1 opacity-80">{s.label}</div>
-                <div className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>{s.sub}</div>
+                transition={{ duration: 0.4, delay: 0.7 + i * 0.07, ease: E }}>
+                <div className="text-2xl font-black text-white font-mono">{s.v}</div>
+                <div className="text-[11px] mt-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>{s.l}</div>
               </motion.div>
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Ticker */}
+      <div className="relative z-10 overflow-hidden flex-shrink-0" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to right, #050709, transparent)' }} />
+        <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to left, #050709, transparent)' }} />
+        <motion.div className="flex items-center w-max py-3"
+          animate={reduce ? {} : { x: ['0%', '-50%'] }}
+          transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}>
+          {['Cosmos SDK', 'IBC Protocol', 'CometBFT', 'Validator Ops', 'Monad', 'Canton', 'Prometheus', 'Grafana', 'Kubernetes', 'Docker', 'Rust', 'Golang', 'AWS', 'Hetzner',
+            'Cosmos SDK', 'IBC Protocol', 'CometBFT', 'Validator Ops', 'Monad', 'Canton', 'Prometheus', 'Grafana', 'Kubernetes', 'Docker', 'Rust', 'Golang', 'AWS', 'Hetzner',
+          ].map((item, i) => (
+            <span key={i} className="flex items-center gap-3 px-5 text-[10px] font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
+              style={{ color: 'rgba(255,255,255,0.2)' }}>
+              <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: 'rgba(255,255,255,0.15)' }} />
+              {item}
+            </span>
+          ))}
+        </motion.div>
       </div>
 
     </section>

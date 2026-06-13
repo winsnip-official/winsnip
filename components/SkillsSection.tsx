@@ -10,60 +10,60 @@ const domains = [
   {
     label: 'Blockchain',
     icon: GitBranch,
-    color: '#60a5fa',
-    glow: 'rgba(96,165,250,0.15)',
-    border: 'rgba(96,165,250,0.25)',
+    color: 'rgba(255,255,255,0.7)',
+    glow: 'rgba(255,255,255,0.04)',
+    border: 'rgba(255,255,255,0.12)',
     skills: ['Cosmos SDK', 'CometBFT', 'IBC Protocol', 'Validator Ops', 'RPC / gRPC', 'Smart Contracts', 'Monad', 'Canton'],
   },
   {
     label: 'Infrastructure',
     icon: Server,
-    color: '#a78bfa',
-    glow: 'rgba(167,139,250,0.15)',
-    border: 'rgba(167,139,250,0.25)',
+    color: 'rgba(255,255,255,0.65)',
+    glow: 'rgba(255,255,255,0.04)',
+    border: 'rgba(255,255,255,0.11)',
     skills: ['Linux', 'Docker', 'Kubernetes', 'Nginx', 'Ansible', 'Terraform', 'CI/CD', 'Load Balancing'],
   },
   {
     label: 'Languages',
     icon: Code2,
-    color: '#34d399',
-    glow: 'rgba(52,211,153,0.15)',
-    border: 'rgba(52,211,153,0.25)',
+    color: 'rgba(255,255,255,0.6)',
+    glow: 'rgba(255,255,255,0.04)',
+    border: 'rgba(255,255,255,0.1)',
     skills: ['Golang', 'Rust', 'Python', 'TypeScript', 'Bash / Shell', 'Node.js'],
   },
   {
     label: 'Data & Storage',
     icon: Database,
-    color: '#fb923c',
-    glow: 'rgba(251,146,60,0.15)',
-    border: 'rgba(251,146,60,0.25)',
+    color: 'rgba(255,255,255,0.55)',
+    glow: 'rgba(255,255,255,0.04)',
+    border: 'rgba(255,255,255,0.1)',
     skills: ['PostgreSQL', 'MySQL', 'Redis', 'MongoDB', 'InfluxDB', 'Elasticsearch'],
   },
   {
     label: 'Observability',
     icon: Activity,
-    color: '#38bdf8',
-    glow: 'rgba(56,189,248,0.15)',
-    border: 'rgba(56,189,248,0.25)',
+    color: 'rgba(255,255,255,0.6)',
+    glow: 'rgba(255,255,255,0.04)',
+    border: 'rgba(255,255,255,0.1)',
     skills: ['Prometheus', 'Grafana', 'AlertManager', 'Loki', 'Jaeger', 'Datadog'],
   },
   {
     label: 'Cloud',
     icon: Cloud,
-    color: '#e879f9',
-    glow: 'rgba(232,121,249,0.15)',
-    border: 'rgba(232,121,249,0.25)',
+    color: 'rgba(255,255,255,0.55)',
+    glow: 'rgba(255,255,255,0.04)',
+    border: 'rgba(255,255,255,0.1)',
     skills: ['AWS', 'Hetzner', 'Netcup', 'Cloudflare', 'Wireguard VPN', 'DDoS Protection'],
   },
 ]
 
 const topSkills = [
-  { name: 'Validator Operations',   pct: 97, color: '#60a5fa' },
-  { name: 'Cosmos SDK',             pct: 95, color: '#60a5fa' },
-  { name: 'Linux / Server Admin',   pct: 95, color: '#a78bfa' },
-  { name: 'Bash / Shell Scripting', pct: 93, color: '#34d399' },
-  { name: 'Prometheus / Grafana',   pct: 91, color: '#38bdf8' },
-  { name: 'Docker / Kubernetes',    pct: 89, color: '#a78bfa' },
+  { name: 'Validator Operations',   pct: 97, color: 'rgba(255,255,255,0.8)' },
+  { name: 'Cosmos SDK',             pct: 95, color: 'rgba(255,255,255,0.75)' },
+  { name: 'Linux / Server Admin',   pct: 95, color: 'rgba(255,255,255,0.7)' },
+  { name: 'Bash / Shell Scripting', pct: 93, color: 'rgba(255,255,255,0.65)' },
+  { name: 'Prometheus / Grafana',   pct: 91, color: 'rgba(255,255,255,0.7)' },
+  { name: 'Docker / Kubernetes',    pct: 89, color: 'rgba(255,255,255,0.65)' },
 ]
 
 export default function SkillsSection() {
@@ -73,14 +73,14 @@ export default function SkillsSection() {
 
   return (
     <section id="skills" className="py-24 overflow-hidden relative"
-      style={{ background: 'linear-gradient(160deg, #071020 0%, #0a1628 100%)' }}>
+      style={{ background: '#050709', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
 
       {/* Subtle dot pattern */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="sk-dot" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
-              <circle cx="1.5" cy="1.5" r="1.5" fill="#60a5fa" />
+              <circle cx="1.5" cy="1.5" r="1.5" fill="rgba(255,255,255,0.6)" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#sk-dot)" />
@@ -96,19 +96,19 @@ export default function SkillsSection() {
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: E }}>
           <div>
-            <p className="text-sm font-semibold text-blue-400 uppercase tracking-widest mb-3">Tech Stack</p>
+            <p className="text-sm font-semibold text-white/60 uppercase tracking-widest mb-3">Tech Stack</p>
             <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-[0.95]">
               36+ technologies,<br />
-              <span style={{ color: 'rgba(255,255,255,0.3)' }}>6 domains.</span>
+              <span style={{ background: 'linear-gradient(90deg,#60a5fa,#a78bfa)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>6 domains.</span>
             </h2>
           </div>
           {/* Stats inline */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
             {[
-              { v: '36+',   l: 'Technologies', color: '#60a5fa' },
-              { v: '99.9%', l: 'Node Uptime',  color: '#34d399' },
-              { v: '50+',   l: 'Networks',      color: '#a78bfa' },
-              { v: '3+',    l: 'Years',          color: '#fb923c' },
+              { v: '36+',   l: 'Technologies', color: 'rgba(255,255,255,0.85)' },
+              { v: '99.9%', l: 'Node Uptime',  color: 'rgba(255,255,255,0.85)' },
+              { v: '50+',   l: 'Networks',      color: 'rgba(255,255,255,0.85)' },
+              { v: '3+',    l: 'Years',          color: 'rgba(255,255,255,0.85)' },
             ].map((s, i) => (
               <motion.div key={s.l}
                 initial={reduce ? false : { opacity: 0, scale: 0.9 }}
@@ -161,7 +161,7 @@ export default function SkillsSection() {
                       initial={reduce ? false : { opacity: 0 }}
                       animate={inView ? { opacity: 1 } : {}}
                       transition={{ duration: 0.25, delay: di * 0.06 + si * 0.025, ease: E }}
-                      whileHover={reduce ? {} : { scale: 1.06, color: d.color, borderColor: `${d.color}60` } as any}>
+                      whileHover={reduce ? {} : { scale: 1.06, color: 'rgba(255,255,255,0.95)', borderColor: 'rgba(255,255,255,0.3)' } as any}>
                       {sk}
                     </motion.span>
                   ))}
@@ -197,7 +197,7 @@ export default function SkillsSection() {
                 </div>
                 <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
                   <motion.div className="h-full rounded-full relative overflow-hidden"
-                    style={{ background: `linear-gradient(90deg, ${b.color}80, ${b.color})` }}
+                    style={{ background: '#3b82f6' }}
                     initial={{ width: 0 }}
                     whileInView={{ width: `${b.pct}%` }}
                     viewport={{ once: true }}
