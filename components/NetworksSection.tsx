@@ -103,7 +103,6 @@ export default function NetworksSection() {
                 initial={reduce ? false : { opacity: 0, x: 16 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.5, delay: i * 0.1, ease: expo }}
                 className={`group flex items-center gap-5 p-5 rounded-2xl bg-zinc-900 border border-zinc-800 ${n.accentBorder} hover:border-opacity-60 overflow-hidden transition-all duration-300 relative`}
                 whileHover={reduce ? {} : { x: 5 }}
                 transition={{ type: 'spring', stiffness: 320, damping: 28 }}

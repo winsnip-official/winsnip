@@ -238,7 +238,6 @@ export default function ShowcaseHero() {
                     key={ex.name}
                     initial={reduce ? false : { opacity: 0, x: 24, y: 8 }}
                     animate={{ opacity: 1, x: 0, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.5 + i * 0.09, ease: expo }}
                     whileHover={reduce ? {} : { x: -4, scale: 1.015 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 26 }}
                     className="group flex items-center gap-4 px-5 py-4 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-colors duration-200 cursor-default"

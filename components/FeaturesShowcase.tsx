@@ -117,7 +117,6 @@ export default function FeaturesShowcase() {
             initial={reduce ? false : { opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.75, ease: expo }}
             className="group relative rounded-2xl bg-zinc-950 border border-zinc-800 hover:border-blue-500/40 overflow-hidden flex flex-col p-8 transition-colors duration-300 min-h-[360px]"
             whileHover={reduce ? {} : { scale: 1.012 }}
             transition={{ type: 'spring', stiffness: 280, damping: 26 }}
@@ -174,7 +173,6 @@ export default function FeaturesShowcase() {
                   initial={reduce ? false : { opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.5, delay: i * 0.07, ease: expo }}
                   className="group flex items-start gap-5 p-5 rounded-xl bg-zinc-950 border border-zinc-800 hover:border-zinc-700 transition-colors duration-200 flex-1"
                   style={{ minHeight: '64px' }}
                   whileHover={reduce ? {} : { x: 3 }}
